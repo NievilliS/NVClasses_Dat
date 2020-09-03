@@ -1,0 +1,50 @@
+-- https://pastebin.com/i9H0WqdZ  |  i9H0WqdZ
+local url = "https://raw.githubusercontent.com/NievilliS/NVClasses_Dat/master/dat"
+local dat = http.get(url)
+local rawfd = dat.readAll()
+dat.close()
+
+print("Got data. Now installing")
+
+local tmp = ""
+local file = ""
+local startupnt = true
+
+if fs.exists("./startup") then
+	startupnt = false
+	printError("Warning! There's already a startup file! Please put a line saying \'shell.run(\"./Class/ClassLoader\")\' in the first line before all code so this API can be imported properly! Thank you. The installing process will continue in 10 seconds...")
+	sleep(10)
+end
+
+for i = 1, rawfd:len() do
+	local rn = string.char((156 + rawfd:sub(i,i):byte()) % 256)
+	tmp = tmp..rn
+	if tmp:match("[$][$][$].+\n") then
+		if file ~= "" and (file ~= "./startup" or startupnt) then
+			local f = fs.open(file, "w")
+			local tx = tmp:match("^(.+)[$][$][$].+\n")
+			local ntx = ""
+			for j = 1, tx:len() do
+				ntx = ntx..string.char((156 + tx:sub(j,j):byte()) % 256)
+			end
+			f.write(ntx)
+			f.close()
+			print(file.." installed")
+		end
+		file = tmp:match("[$][$][$](.+)\n")
+		tmp = ""
+		sleep() --This is required or the program will break due to yielding
+	end
+end
+if file ~= "" and (file ~= "./startup" or startupnt) then
+	local f = fs.open(file, "w")
+	local ntx = ""
+	for j = 1, tmp:len() do
+		ntx = ntx..string.char((156 + tmp:sub(j,j):byte()) % 256)
+	end
+	f.write(ntx)
+	f.close()
+	print(file.." installed")
+end
+
+print("Done! reboot to run for the first time")
