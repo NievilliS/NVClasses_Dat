@@ -1,8 +1,18 @@
--- https://pastebin.com/i9H0WqdZ  |  i9H0WqdZ
+-- https://pastebin.com/X7FN9BWU  |  X7FN9BWU
 local url = "https://raw.githubusercontent.com/NievilliS/NVClasses_Dat/master/dat"
 local dat = http.get(url)
 local rawfd = dat.readAll()
 dat.close()
+
+local tchar = {}
+local t2char = {}
+local schar = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"§$%&/()=?{\n]}\\´`'+*~,.-;:_@<>|^°#\009 ["
+print(schar:len())
+for i = 0, schar:len()-1 do
+	tchar[i] = schar:sub(i+1,i+1)
+	t2char[schar:sub(i+1,i+1)] = i
+end
+
 
 print("Got data. Now installing")
 
@@ -17,7 +27,7 @@ if fs.exists("./startup") then
 end
 
 for i = 1, rawfd:len() do
-	local rn = string.char((156 + rawfd:sub(i,i):byte()) % 256)
+	local rn = tchar[((75) + t2char[rawfd:sub(i,i)]) % (schar:len())]
 	tmp = tmp..rn
 	if tmp:match("[$][$][$].+\n") then
 		if file ~= "" and (file ~= "./startup" or startupnt) then
@@ -25,7 +35,7 @@ for i = 1, rawfd:len() do
 			local tx = tmp:match("^(.+)[$][$][$].+\n")
 			local ntx = ""
 			for j = 1, tx:len() do
-				ntx = ntx..string.char((156 + tx:sub(j,j):byte()) % 256)
+				ntx = ntx..tchar[((schar:len()/2) + t2char[tx:sub(j,j)]) % (schar:len())]
 			end
 			f.write(ntx)
 			f.close()
@@ -40,11 +50,11 @@ if file ~= "" and (file ~= "./startup" or startupnt) then
 	local f = fs.open(file, "w")
 	local ntx = ""
 	for j = 1, tmp:len() do
-		ntx = ntx..string.char((156 + tmp:sub(j,j):byte()) % 256)
+		ntx = ntx..tchar[((schar:len()/2) + t2char[tmp:sub(i,i)]) % (schar:len())]
 	end
 	f.write(ntx)
 	f.close()
 	print(file.." installed")
 end
 
-print("Done! reboot to run for the first time")
+print("Done! reboot to apply API")
