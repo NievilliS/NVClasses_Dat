@@ -1,4 +1,4 @@
--- https://pastebin.com/X7FN9BWU  |  X7FN9BWU
+-- https://pastebin.com/QEKGUerL  |  QEKGUerL
 local url = "https://raw.githubusercontent.com/NievilliS/NVClasses_Dat/master/dat"
 local dat = http.get(url)
 local rawfd = dat.readAll()
