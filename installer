@@ -50,6 +50,7 @@ if file ~= "" and (file ~= "./startup" or startupnt) then
 	local f = fs.open(file, "w")
 	local ntx = ""
 	for j = 1, tmp:len() do
+		write(tmp:sub(i,i))
 		ntx = ntx..tchar[((schar:len()/2) + t2char[tmp:sub(i,i)]) % (schar:len())]
 	end
 	f.write(ntx)
